@@ -1,5 +1,5 @@
 // const API = "personasEmpleadosClientes.php";
-const API = "http://localhost/PROBANDO/personasEmpleadosClientes.php"; //REVISAR!!
+const API_URL = "http://localhost/PROBANDO/personasEmpleadosClientes.php";
 
 function $(id){return document.getElementById(id)}
 
@@ -8,18 +8,17 @@ function mostrarDatos()
     const XHTTP = new XMLHttpRequest();
 
     // XHTTP.open("GET", "Prueba.txt");
-    XHTTP.open("GET", API);
+    XHTTP.open("GET", API_URL);
     // XHTTP.open("GET", "test.php");
-    // XHTTP.open("GET", PRUEBA);
-    
+
+
     XHTTP.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200)
         {
-            console.log(XHTTP.response);
+            //console.log(XHTTP.response);
             let clientes = JSON.parse(XHTTP.response);
-            console.log(clientes);
 
-            let tabla = document.querySelector("#tabla-personas tbody");
+            let tabla = document.querySelector("#tablaPersonas tbody");
             
             clientes.forEach(function(cliente) {
                 let fila = document.createElement("tr");
@@ -64,17 +63,21 @@ function mostrarDatos()
             console.log(XHTTP.statusText);
         }
     };
+
     
     XHTTP.send();
 }
 
+
+
+
+
+
+
+
+
+
+
+
 mostrarDatos();
 
-// fetch('http://localhost/PROBANDO/personasEmpleadosClientes.php')
-//   .then(response => response.text())
-//   .then(data => {
-//     console.log(data);
-//   })
-//   .catch(error => {
-//     console.error('Error:', error);
-//   });
