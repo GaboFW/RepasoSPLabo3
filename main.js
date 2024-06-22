@@ -1,5 +1,5 @@
 // const API = "personasEmpleadosClientes.php";
-const API_URL = "http://localhost/PROBANDO/personasEmpleadosClientes.php";
+const API_URL = "http://localhost/Labo3/personasEmpleadosClientes.php";
 
 function $(id){return document.getElementById(id)}
 
@@ -7,15 +7,11 @@ function mostrarDatos()
 {
     const XHTTP = new XMLHttpRequest();
 
-    // XHTTP.open("GET", "Prueba.txt");
     XHTTP.open("GET", API_URL);
-    // XHTTP.open("GET", "test.php");
-
 
     XHTTP.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200)
         {
-            //console.log(XHTTP.response);
             let clientes = JSON.parse(XHTTP.response);
 
             let tabla = document.querySelector("#tablaPersonas tbody");
@@ -67,17 +63,6 @@ function mostrarDatos()
     
     XHTTP.send();
 }
-
-
-
-
-
-
-
-
-
-
-
 
 mostrarDatos();
 
