@@ -8,6 +8,8 @@ function mostrarDatos()
 
     XHTTP.open("GET", API_URL);
 
+    borrarTd();
+
     XHTTP.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200)
         {
@@ -53,10 +55,20 @@ function mostrarDatos()
                 let columnaBotones = document.createElement("td");
                 let botonModificar = document.createElement("button");
                 botonModificar.textContent = "Modificar";
+
+                // botonModificar.addEventListener("click", function() {
+                //     console.log("click Modificar");
+                // });
+
                 columnaBotones.appendChild(botonModificar);
                 
                 let botonEliminar = document.createElement("button");
                 botonEliminar.textContent = "Eliminar";
+
+                // botonEliminar.addEventListener("click", function() {
+                //     console.log("click Eliminar");
+                // });
+
                 columnaBotones.appendChild(botonEliminar);
                 
                 fila.appendChild(columnaBotones);
@@ -68,11 +80,11 @@ function mostrarDatos()
             console.log(XHTTP.statusText);
         }
     };
-
+    
     XHTTP.send();
 }
 
-//BOTON AGREGAR
+//BOTON AGREGAR ELEMENTO
 $("btnAgregar").addEventListener("click", function() {
     mostrarAbm();
 
@@ -82,18 +94,19 @@ $("btnAgregar").addEventListener("click", function() {
 
         console.log(tipo);
     });
-})
+});
 
-//BOTON CANCELAR!
+//BOTON ACEPTAR EN ABM
+$("btnAceptar").addEventListener("click", function() {
+    console.log("Hice click en el boton Aceptar del AMB");
+    
+});
+
+//BOTON CANCELAR ABM 
 $("btnCancelar").addEventListener("click", function() {
     ocultarAbm();
-
-    document.querySelectorAll("tbody td").forEach(cell => {
-        cell.remove();
-
-        console.log("BORRE!");
-    });
-})
+    borrarTd();
+});
 
 function mostrarAbm()
 {
@@ -136,6 +149,25 @@ function actualizarVisibilidadCampos(tipo)
         divCliente.style.display = "block";
     }
 }
+
+function borrarTd()
+{
+    document.querySelectorAll("tbody td").forEach(cell => {
+        cell.remove();
+
+        console.log("BORRE!");
+    });
+}
+
+// function mostrarSpinner()
+// {
+//     $("spinner").style.display = "block";
+// }
+
+// function ocultarSpinner()
+// {
+//     $("spinner").style.display = "none";
+// }
 
 document.addEventListener("DOMContentLoaded", function (){
     mostrarDatos();
