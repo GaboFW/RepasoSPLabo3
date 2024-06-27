@@ -1,4 +1,3 @@
-// const API = "personasEmpleadosClientes.php";
 const API_URL = "http://localhost/Labo3/personasEmpleadosClientes.php";
 
 function $(id){return document.getElementById(id)}
@@ -15,7 +14,7 @@ function mostrarDatos()
             let clientes = JSON.parse(XHTTP.response);
 
             let tabla = document.querySelector("#tablaPersonas tbody");
-            
+
             clientes.forEach(function(cliente) {
                 let fila = document.createElement("tr");
                 
@@ -51,6 +50,16 @@ function mostrarDatos()
                 columnaTelefono.textContent = cliente.telefono;
                 fila.appendChild(columnaTelefono);
                 
+                let columnaBotones = document.createElement("td");
+                let botonModificar = document.createElement("button");
+                botonModificar.textContent = "Modificar";
+                columnaBotones.appendChild(botonModificar);
+                
+                let botonEliminar = document.createElement("button");
+                botonEliminar.textContent = "Eliminar";
+                columnaBotones.appendChild(botonEliminar);
+                
+                fila.appendChild(columnaBotones);
                 tabla.appendChild(fila);
             });
         }
@@ -60,9 +69,75 @@ function mostrarDatos()
         }
     };
 
-    
     XHTTP.send();
 }
 
-mostrarDatos();
+//BOTON AGREGAR
+$("btnAgregar").addEventListener("click", function() {
+    mostrarAbm();
+
+    $("selectTipo").addEventListener("change", function (){
+        let tipo = this.value;
+        actualizarVisibilidadCampos(tipo);
+
+        console.log(tipo);
+    });
+})
+
+//BOTON CANCELAR!
+$("btnCancelar").addEventListener("click", function() {
+    ocultarAbm();
+
+    document.querySelectorAll("tbody td").forEach(cell => {
+        cell.remove();
+
+        console.log("BORRE!");
+    });
+})
+
+function mostrarAbm()
+{
+    $("formularioAbm").style.display = "block";
+    $("formularioLista").style.display = "none";
+
+    let tipo = $("selectTipo").value;
+    actualizarVisibilidadCampos(tipo);
+
+    $("abmNombre").value = "";
+    $("abmApellido").value = "";
+    $("abmEdad").value = "";
+    $("abmVentas").value = "";
+    $("abmSueldo").value = "";
+    $("abmCompras").value = "";
+    $("abmTelefono").value = "";
+}
+
+function ocultarAbm()
+{
+    $("formularioAbm").style.display = "none";
+    $("formularioLista").style.display = "block";
+
+    mostrarDatos();
+}
+
+function actualizarVisibilidadCampos(tipo)
+{
+    let divEmpleado = $("empleado");
+    let divCliente = $("cliente");
+
+    if (tipo === "Empleado")
+    {
+        divEmpleado.style.display = "block";
+        divCliente.style.display = "none";
+    }
+    else
+    {
+        divEmpleado.style.display = "none";
+        divCliente.style.display = "block";
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function (){
+    mostrarDatos();
+});
 
