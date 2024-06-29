@@ -29,13 +29,14 @@ function mostrarListaPersonas()
 function renderizarTabla()
 {
     let tabla = document.querySelector("#tablaPersonas tbody");
+
     borrarTd();
 
     LISTAPERSONAS.forEach(function(cliente) {
         let fila = document.createElement("tr");
         
         let columnaId = document.createElement("td");
-        columnaId.textContent = cliente.id;
+        columnaId.textContent = cliente.id; 
         fila.appendChild(columnaId);
         
         let columnaNombre = document.createElement("td");
@@ -51,19 +52,19 @@ function renderizarTabla()
         fila.appendChild(columnaEdad);
 
         let columnaVentas = document.createElement("td");
-        columnaVentas.textContent = cliente.ventas;
+        columnaVentas.textContent = cliente.ventas ;
         fila.appendChild(columnaVentas);
 
         let columnaSueldo = document.createElement("td");
-        columnaSueldo.textContent = cliente.sueldo;
+        columnaSueldo.textContent = cliente.sueldo ;
         fila.appendChild(columnaSueldo);
 
         let columnaCompras = document.createElement("td");
-        columnaCompras.textContent = cliente.compras;
+        columnaCompras.textContent = cliente.compras ;
         fila.appendChild(columnaCompras);
 
         let columnaTelefono = document.createElement("td");
-        columnaTelefono.textContent = cliente.telefono;
+        columnaTelefono.textContent = cliente.telefono ;
         fila.appendChild(columnaTelefono);
         
         let columnaBotones = document.createElement("td");
@@ -72,6 +73,7 @@ function renderizarTabla()
         //MODIFICAR
         botonModificar.addEventListener("click", function() {
             console.log("Click modificar " + cliente.id);
+
             mostrarAbm(cliente);
         });
 
@@ -96,6 +98,7 @@ function renderizarTabla()
                 else
                 {
                     console.error("Error al eliminar");
+                    
                     ocultarSpinner();
                 }
             };
@@ -129,7 +132,7 @@ $("btnAgregar").addEventListener("click", function() {
 });
 
 //BOTON ACEPTAR EN ABM
-$("btnAceptar").addEventListener("click", async () => {
+$("btnAceptar").addEventListener("click", () => {
     console.log("Click aceptar abm");
 
     mostrarSpinner();
@@ -146,52 +149,25 @@ $("btnAceptar").addEventListener("click", async () => {
         telefono: $("abmTelefono").value
     };
 
-    let metodo;
     if (nuevaPersona.id)
     {
-        metodo = "POST";
+        actualizarPersona(nuevaPersona);
+
+        renderizarTabla();
+        ocultarAbm();
+        ocultarSpinner()
     }
     else
     {
-        metodo = "PUT";
-    }
-
-    fetch(API_URL, {
-        method: metodo,
-        headers: {
-            "Content-Type": "application/json;charset=UTF-8"
-        },
-        body: JSON.stringify(nuevaPersona)
-    })
-    .then(respuesta => {
-        if (metodo === "PUT") //AGREGAR
-        {
-            console.log(metodo);
-
-            nuevaPersona.id = respuesta.id;
-            LISTAPERSONAS.push(nuevaPersona);
-        } 
-        if (metodo === "POST") //MODIFICAR
-        {
-            console.log(metodo);
-
-            let index = LISTAPERSONAS.findIndex(persona => persona.id === nuevaPersona.id);
-            if (index !== -1)
-            {
-                LISTAPERSONAS[index] = nuevaPersona;
-            }
-        }
+        insertarPersona(nuevaPersona);
 
         renderizarTabla();
         ocultarAbm();
         ocultarSpinner();
-    })
-    .catch(error => {
-        console.error(error.message);
-        ocultarAbm();
-        ocultarSpinner();
-    });
+    }
 });
+
+
 
 //BOTON CANCELAR ABM 
 $("btnCancelar").addEventListener("click", function() {
@@ -205,8 +181,7 @@ function mostrarAbm(persona = null)
     $("formularioAbm").style.display = "block";
     $("formularioLista").style.display = "none";
 
-    let tipo = $("selectTipo").value;
-    actualizarVisibilidadCampos(tipo);
+    let tipo = $("selectTipo");
 
     if (persona)
     {
@@ -216,11 +191,20 @@ function mostrarAbm(persona = null)
         $("abmNombre").value = persona.nombre;
         $("abmApellido").value = persona.apellido;
         $("abmEdad").value = persona.edad;
-        tipo = persona.tipo;
+        if (persona.compras)
+        {
+            tipo.value = "Cliente";
+        }
+        else
+        {
+            tipo.value = "Empleado";
+        }
         $("abmVentas").value = persona.ventas;
         $("abmSueldo").value = persona.sueldo;
         $("abmCompras").value = persona.compras;
         $("abmTelefono").value = persona.telefono;
+        
+        actualizarVisibilidadCampos(tipo.value);
     }
     else
     {
@@ -234,6 +218,8 @@ function mostrarAbm(persona = null)
         $("abmTelefono").value = "";
 
         $("selectTipo").disabled = false;
+
+        actualizarVisibilidadCampos(tipo.value);
     }
 }
 
@@ -260,6 +246,73 @@ function actualizarVisibilidadCampos(tipo)
         divEmpleado.style.display = "none";
         divCliente.style.display = "block";
     }
+}
+
+async function actualizarPersona(nuevaPersona)
+{
+    console.log("Async");
+
+    fetch(API_URL, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json;charset=UTF-8"
+        },
+        body: JSON.stringify(nuevaPersona)
+    })
+    .then(respuesta => {
+        let index = LISTAPERSONAS.findIndex(persona => persona.id == nuevaPersona.id);
+        if (index !== -1)   
+        {
+            LISTAPERSONAS[index].nombre = nuevaPersona.nombre;
+            LISTAPERSONAS[index].apellido = nuevaPersona.apellido;
+            LISTAPERSONAS[index].edad = nuevaPersona.edad;
+            if (nuevaPersona.tipo === "Empleado")
+            {
+                LISTAPERSONAS[index].ventas = nuevaPersona.ventas;
+                LISTAPERSONAS[index].sueldo = nuevaPersona.sueldo;
+            }
+            if (nuevaPersona.tipo === "Cliente")
+            {
+                LISTAPERSONAS[index].compras = nuevaPersona.compras;
+                LISTAPERSONAS[index].telefono = nuevaPersona.telefono;
+            }
+        }
+
+        ocultarAbm();
+    })
+    .catch(error => {
+        console.error(error.message);
+        ocultarAbm();
+        ocultarSpinner();
+    });
+}
+
+function insertarPersona(nuevaPersona)
+{
+    fetch(API_URL, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json;charset=UTF-8"
+        },
+        body: JSON.stringify(nuevaPersona)
+    })
+    .then(respuesta => {
+        if (respuesta.status == 200) //AGREGAR
+        {
+            nuevaPersona.id = respuesta.id;
+            LISTAPERSONAS.push(nuevaPersona);
+
+            ocultarSpinner();
+            ocultarAbm();
+        }
+    })
+    .catch(error => {
+        console.error(error.message);
+
+        ocultarAbm();
+        ocultarSpinner();
+        renderizarTabla();
+    });
 }
 
 function borrarTd()
