@@ -72,7 +72,7 @@ function renderizarTabla()
         //MODIFICAR
         botonModificar.addEventListener("click", function() {
             console.log("Click modificar " + cliente.id);
-            mostrarAbm(LISTAPERSONAS);
+            mostrarAbm(cliente);
         });
 
         let botonEliminar = document.createElement("button");
@@ -119,6 +119,11 @@ $("btnAgregar").addEventListener("click", function() {
         let tipo = this.value;
         actualizarVisibilidadCampos(tipo);
 
+        $("abmVentas").value = "";
+        $("abmSueldo").value = "";
+        $("abmCompras").value = "";
+        $("abmTelefono").value = "";
+
         console.log(tipo);
     });
 });
@@ -127,27 +132,19 @@ $("btnAgregar").addEventListener("click", function() {
 $("btnAceptar").addEventListener("click", async () => {
     console.log("Click aceptar abm");
 
-    let tipo = $("selectTipo").value;
+    mostrarSpinner();
+
     let nuevaPersona = {
         id: $("abmId").value,
         nombre: $("abmNombre").value,
         apellido: $("abmApellido").value,
         edad: $("abmEdad").value,
-        tipo: tipo
+        tipo: $("selectTipo").value,
+        ventas: $("abmVentas").value,
+        sueldo: $("abmSueldo").value,
+        compras: $("abmCompras").value,
+        telefono: $("abmTelefono").value
     };
-
-    if (tipo === "Empleado")
-    {
-        nuevaPersona.ventas = $("abmVentas").value;
-        nuevaPersona.sueldo = $("abmSueldo").value;
-    }
-    else if (tipo === "Cliente")
-    {
-        nuevaPersona.compras = $("abmCompras").value;
-        nuevaPersona.telefono = $("abmTelefono").value;
-    }
-
-    mostrarSpinner();
 
     let metodo;
     if (nuevaPersona.id)
@@ -159,9 +156,7 @@ $("btnAceptar").addEventListener("click", async () => {
         metodo = "PUT";
     }
 
-    const url = API_URL;
-
-    fetch(url, {
+    fetch(API_URL, {
         method: metodo,
         headers: {
             "Content-Type": "application/json;charset=UTF-8"
@@ -169,37 +164,32 @@ $("btnAceptar").addEventListener("click", async () => {
         body: JSON.stringify(nuevaPersona)
     })
     .then(respuesta => {
-        if (metodo === "PUT")
+        if (metodo === "PUT") //AGREGAR
         {
             console.log(metodo);
 
             nuevaPersona.id = respuesta.id;
             LISTAPERSONAS.push(nuevaPersona);
-
-            ocultarSpinner();
-        }
-        else if (metodo === "POST")
+        } 
+        if (metodo === "POST") //MODIFICAR
         {
             console.log(metodo);
 
             let index = LISTAPERSONAS.findIndex(persona => persona.id === nuevaPersona.id);
-
             if (index !== -1)
             {
-                LISTAPERSONAS[index] = persona;
+                LISTAPERSONAS[index] = nuevaPersona;
             }
-
-            renderizarTabla();
-            ocultarAbm();
-            ocultarSpinner();
         }
 
         renderizarTabla();
         ocultarAbm();
+        ocultarSpinner();
     })
     .catch(error => {
         console.error(error.message);
         ocultarAbm();
+        ocultarSpinner();
     });
 });
 
@@ -222,35 +212,15 @@ function mostrarAbm(persona = null)
     {
         $("selectTipo").disabled = true;
 
-        let id = $("abmId").value = persona.id;
-        let nombre = $("abmNombre").value = persona.nombre;
-        let apellido = $("abmApellido").value = persona.apellido;
-        let edad = $("abmEdad").value = persona.edad;
+        $("abmId").value = persona.id;
+        $("abmNombre").value = persona.nombre;
+        $("abmApellido").value = persona.apellido;
+        $("abmEdad").value = persona.edad;
         tipo = persona.tipo;
-        let ventas = $("abmVentas").value = persona.ventas;
-        let sueldo = $("abmSueldo").value = persona.sueldo;
-        let compras = $("abmCompras").value = persona.compras;
-        let telefono = $("abmTelefono").value = persona.telefono;
-
-        let index = persona.findIndex(personas => personas.id == id)
-
-        if (index !== -1)
-        {
-            persona[index].nombre = nombre;
-            persona[index].apellido = apellido;
-            persona[index].edad = edad;
-
-            if (persona.tipo === "Empleado")
-            {
-                persona[index].ventas = ventas;
-                persona[index].sueldo = sueldo;
-            }
-            if (persona.tipo === "Cliente")
-            {
-                persona[index].compras = compras;
-                persona[index].telefono = telefono;
-            }
-        }
+        $("abmVentas").value = persona.ventas;
+        $("abmSueldo").value = persona.sueldo;
+        $("abmCompras").value = persona.compras;
+        $("abmTelefono").value = persona.telefono;
     }
     else
     {
@@ -264,7 +234,6 @@ function mostrarAbm(persona = null)
         $("abmTelefono").value = "";
 
         $("selectTipo").disabled = false;
-
     }
 }
 
