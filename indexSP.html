@@ -7,7 +7,9 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- <div id="spinner" class="spinner"></div> -->
+    <div class="spinnerContainer">
+        <div id="spinner" class="spinner"></div>
+    </div>
 
     <div id="formularioLista">
         <table id="tablaPersonas">
@@ -25,7 +27,7 @@
                 </tr>
             </thead>
             <tbody>
-
+                
             </tbody>
         </table>
         <button id="btnAgregar">Agregar Elemento</button>
@@ -35,7 +37,7 @@
         <div id="formularioAbm" style="display: none;">
             <h1>Formulario ABM</h1>
 
-            <p>ID: <input type="text" id="id" readonly></p>
+            <p>ID: <input type="text" id="abmId" readonly></p>
             <p>Nombre: <input type="text" id="abmNombre" placeholder="Nombre"></p>
             <p>Apellido: <input type="text" id="abmApellido" placeholder="Apellido"></p>
             <p>Edad: <input type="number" id="abmEdad" placeholder="Edad"></p>
