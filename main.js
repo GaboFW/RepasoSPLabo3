@@ -141,7 +141,11 @@ function renderizarTabla()
         //MODIFICAR
         botonModificar.addEventListener("click", function() {
             console.log("Click modificar " + cliente.id);
+<<<<<<< HEAD
             
+=======
+
+>>>>>>> 4be75554e6253f21700d8fa90b8a4a9566ec871c
             mostrarAbm(cliente);
         });
 
@@ -215,6 +219,7 @@ $("btnAceptar").addEventListener("click", () => {
         telefono: $("abmTelefono").value
     };
 
+<<<<<<< HEAD
     if (nuevaPersona.nombre == "" || nuevaPersona.apellido == "" || nuevaPersona.edad < 15)
     {
         alert("Complete los campos Nombre, Apellido o Edad correctamente");
@@ -239,6 +244,8 @@ $("btnAceptar").addEventListener("click", () => {
         }
     }
 
+=======
+>>>>>>> 4be75554e6253f21700d8fa90b8a4a9566ec871c
     if (nuevaPersona.id)
     {
         actualizarPersona(nuevaPersona);
@@ -256,6 +263,8 @@ $("btnAceptar").addEventListener("click", () => {
         ocultarSpinner();
     }
 });
+
+
 
 //BOTON CANCELAR ABM 
 $("btnCancelar").addEventListener("click", function() {
@@ -341,7 +350,11 @@ async function actualizarPersona(nuevaPersona)
     console.log("Async");
 
     fetch(API_URL, {
+<<<<<<< HEAD
         method: "POST", //MODIFICAR
+=======
+        method: "POST",
+>>>>>>> 4be75554e6253f21700d8fa90b8a4a9566ec871c
         headers: {
             "Content-Type": "application/json;charset=UTF-8"
         },
@@ -371,11 +384,16 @@ async function actualizarPersona(nuevaPersona)
     .catch(error => {
         console.error(error.message);
         ocultarAbm();
+<<<<<<< HEAD
+=======
+        ocultarSpinner();
+>>>>>>> 4be75554e6253f21700d8fa90b8a4a9566ec871c
     });
 }
 
 function insertarPersona(nuevaPersona)
 {
+<<<<<<< HEAD
     let put = {
         method: "PUT", //AGREGAR
         headers: {
@@ -394,6 +412,24 @@ function insertarPersona(nuevaPersona)
         ocultarSpinner();
         ocultarAbm();
         renderizarTabla();
+=======
+    fetch(API_URL, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json;charset=UTF-8"
+        },
+        body: JSON.stringify(nuevaPersona)
+    })
+    .then(respuesta => {
+        if (respuesta.status == 200) //AGREGAR
+        {
+            nuevaPersona.id = respuesta.id;
+            LISTAPERSONAS.push(nuevaPersona);
+
+            ocultarSpinner();
+            ocultarAbm();
+        }
+>>>>>>> 4be75554e6253f21700d8fa90b8a4a9566ec871c
     })
     .catch(error => {
         console.error(error.message);

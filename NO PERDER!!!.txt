@@ -146,6 +146,7 @@ En el alta hacer la llamada perfecta como si fuera una api posta solo para el id
 //////////////////////////////////////////////////////////////////////////////////
 
 fetch(API_URL, {
+<<<<<<< HEAD
     method: metodo,
     headers: {
         "Content-Type": "application/json;charset=UTF-8"
@@ -188,6 +189,48 @@ fetch(API_URL, {
     }
 })
 
+=======
+        method: metodo,
+        headers: {
+            "Content-Type": "application/json;charset=UTF-8"
+        },
+        body: JSON.stringify(nuevaPersona)
+    })
+    .then(respuesta => {
+        if (metodo === "PUT" && respuesta.status == 200) //AGREGAR
+        {
+            console.log(metodo);
+
+            nuevaPersona.id = respuesta.id;
+            LISTAPERSONAS.push(nuevaPersona);
+
+            ocultarSpinner();
+        } 
+        if (metodo === "POST") //MODIFICAR
+        {
+            console.log(metodo);
+
+            let tipo = $("selectTipo").value;
+
+            let index = LISTAPERSONAS.findIndex(persona => persona.id == nuevaPersona.id);
+            if (index !== -1)
+            {
+                LISTAPERSONAS[index].nombre = nuevaPersona.nombre;
+                LISTAPERSONAS[index].apellido = nuevaPersona.apellido;
+                LISTAPERSONAS[index].edad = nuevaPersona.edad;
+                if (tipo === "Empleado")
+                {
+                    LISTAPERSONAS[index].ventas = nuevaPersona.ventas;
+                    LISTAPERSONAS[index].sueldo = nuevaPersona.sueldo;
+                }
+                if (tipo === "Cliente")
+                {
+                    LISTAPERSONAS[index].compras = nuevaPersona.compras;
+                    LISTAPERSONAS[index].telefono = nuevaPersona.telefono;
+                }
+            }
+        }
+>>>>>>> 4be75554e6253f21700d8fa90b8a4a9566ec871c
 
 
 
