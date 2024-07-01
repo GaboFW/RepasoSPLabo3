@@ -1,17 +1,47 @@
+body
+{
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
 table
 {
     width: 100%;
     border-collapse: collapse;
+    margin: 20px 0;
 }
 th, td
 {
-    border: 1px solid black;
+    border: 1px solid #ddd;
     padding: 8px;
     text-align: left;
 }
 th
 {
-    background-color: white;
+    background-color: #4CAF50;
+    color: white;
+}
+tr:hover
+{
+    background-color: #ddd;
+}
+
+button
+{
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 10px 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+}
+button:hover
+{
+    background-color: #45a049;
 }
 
 .abmContainer
@@ -20,6 +50,24 @@ th
     justify-content: center;
     align-items: center;
     height: 100vh;
+}
+.abmForm {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+}
+.abmForm h1 {
+    margin-top: 0;
+}
+.abmForm form p {
+    margin: 10px 0;
+}
+.abmForm form input, .abmForm form select {
+    width: calc(100% - 20px);
+    padding: 8px;
+    margin-top: 5px;
 }
 
 .spinnerContainer
